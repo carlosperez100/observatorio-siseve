@@ -3,31 +3,42 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SíseVe · análisis y proyección por zona y colegio</title>
+<title>Observatorio SíseVe · CIIDEG</title>
+<meta name="description" content="Reportes de violencia escolar (SíseVe – MINEDU) por región, UGEL, distrito y colegio, con proyección 2026 y lectura bajo el Modelo GEMSES. Actualización semanal. CIIDEG.">
+<meta property="og:title" content="Observatorio SíseVe · CIIDEG">
+<meta property="og:description" content="Violencia escolar reportada en el Perú, colegio a colegio. Actualización semanal desde el portal SíseVe del MINEDU.">
+<meta property="og:image" content="https://carlosperez100.github.io/observatorio-siseve/assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#12385f">
+<link rel="icon" type="image/png" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,650&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{
-  --paper:#F2F4F1; --card:#FFFFFF; --ink:#1C2833; --muted:#566573; --rule:#D3DAD6;
-  --accent:#1F6F5C; --proj:#C07A16; --fis:#B04A3A; --psi:#2F6690; --sex:#6D4C8D; --pand:#B8C0C8;
+  --paper:#F5F8FB; --card:#FFFFFF; --ink:#142233; --muted:#5A6A7D; --rule:#D9E2EC;
+  --brand:#12385F; --gold:#D7A526;
+  --accent:#1F6A8A; --proj:#C9971D; --fis:#B04A3A; --psi:#2F6690; --sex:#6D4C8D; --pand:#B8C0C8;
   --warn:#A23B2A;
   box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --paper:#141B21; --card:#1B242C; --ink:#E6EBE8; --muted:#9AA7B1; --rule:#2E3A44;
-  --accent:#4FB394; --proj:#E3A33F; --fis:#E07A68; --psi:#6FA8D6; --sex:#B294D4; --pand:#55616C; --warn:#F08A76;
+  --paper:#0E1A27; --card:#152435; --ink:#E6EDF4; --muted:#9AAABB; --rule:#2A3B4F;
+  --brand:#0B2540; --gold:#F0C85D;
+  --accent:#5FA8C9; --proj:#F0C85D; --fis:#E07A68; --psi:#6FA8D6; --sex:#B294D4; --pand:#55616C; --warn:#F08A76;
 }}
 :root[data-theme="dark"]{
-  --paper:#141B21; --card:#1B242C; --ink:#E6EBE8; --muted:#9AA7B1; --rule:#2E3A44;
-  --accent:#4FB394; --proj:#E3A33F; --fis:#E07A68; --psi:#6FA8D6; --sex:#B294D4; --pand:#55616C; --warn:#F08A76;
+  --paper:#0E1A27; --card:#152435; --ink:#E6EDF4; --muted:#9AAABB; --rule:#2A3B4F;
+  --brand:#0B2540; --gold:#F0C85D;
+  --accent:#5FA8C9; --proj:#F0C85D; --fis:#E07A68; --psi:#6FA8D6; --sex:#B294D4; --pand:#55616C; --warn:#F08A76;
 }
 *,*::before,*::after{box-sizing:border-box}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 "Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
 .wrap{max-width:1080px;margin:0 auto;padding:0 16px 48px}
-h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;font-weight:650;line-height:1.15;margin:0}
+h1,h2,h3{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.015em;line-height:1.15;margin:0}
 header{padding:28px 0 12px}
 .kicker{color:var(--muted);font-size:14px;margin:0 0 6px}
 #zona{font-size:clamp(30px,7vw,54px);letter-spacing:-.01em;word-break:break-word}
@@ -48,7 +59,7 @@ select,input[type=search],input[type=range]{font:inherit;font-size:14px;color:va
 .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin:18px 0}
 @media(min-width:760px){.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .kpi{background:var(--card);padding:12px 14px}
-.kpi b{display:block;font-family:"Source Serif 4",Georgia,serif;font-size:26px;font-weight:650;line-height:1.1}
+.kpi b{display:block;font-family:Inter,system-ui,sans-serif;font-size:26px;font-weight:800;line-height:1.1}
 .kpi span{font-size:13px;color:var(--muted)}
 .kpi.proj b{color:var(--proj)}
 section{margin-top:30px}
@@ -102,13 +113,38 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid va
 .gauge{height:14px;border-radius:7px;background:linear-gradient(90deg,var(--accent),var(--proj),var(--warn));position:relative;margin:10px 0 4px}
 .gauge i{position:absolute;top:-5px;width:4px;height:24px;background:var(--ink);border-radius:2px;transform:translateX(-2px)}
 .stamp{display:inline-block;font-size:12px;border:1px solid var(--rule);border-radius:99px;padding:2px 10px;color:var(--muted);margin-top:8px}
-.ok{color:var(--accent)}.bad{color:var(--warn)}
+.ok{color:var(--accent)}
+.brandbar{background:var(--brand);color:#fff}
+.brandbar .in{max-width:1080px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brandbar .logo{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;min-width:0;flex:1}
+.brandbar .logo span{background:#fff;border-radius:10px;padding:4px;display:inline-flex}
+.brandbar .logo img{height:40px;width:auto;display:block}
+.brandbar .logo b{font-size:15px;line-height:1.2;font-weight:700}
+.brandbar .logo small{display:block;font-size:12px;opacity:.8;font-weight:400}
+.brandbar nav{display:flex;gap:8px;flex-wrap:wrap}
+.brandbar nav a{color:#fff;text-decoration:none;font-size:13px;font-weight:600;border:1px solid rgba(255,255,255,.35);border-radius:99px;padding:6px 12px}
+.brandbar nav a.wa{background:var(--gold);border-color:var(--gold);color:#142233}
+@media(max-width:759px){.filters{position:static}}
+@media(max-width:600px){.brandbar .logo small{display:none}.brandbar .logo img{height:34px}.brandbar nav a{padding:5px 10px}}
+.goldrule{height:4px;background:linear-gradient(90deg,var(--gold),#f0c85d 60%,transparent)}
+.cta{margin-top:30px;background:var(--brand);color:#fff;border-radius:12px;padding:20px;display:grid;gap:12px}
+@media(min-width:760px){.cta{grid-template-columns:1fr auto;align-items:center}}
+.cta h2{color:#fff;font-size:22px}.cta p{margin:6px 0 0;opacity:.9;max-width:62ch}
+.cta a{background:var(--gold);color:#142233;text-decoration:none;font-weight:700;border-radius:99px;padding:12px 20px;text-align:center;white-space:nowrap}
+.foot-brand{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--rule)}
+.foot-brand img{height:52px;width:auto;background:#fff;border-radius:8px;padding:4px}.bad{color:var(--warn)}
 </style>
 </head>
 <body>
+<div class="brandbar"><div class="in">
+  <a class="logo" href="https://ciideg.com" target="_blank" rel="noopener"><span><img src="assets/logo-ciideg.webp" alt="CIIDEG" width="35" height="40"></span>
+    <b>Observatorio SíseVe<small>CIIDEG · Centro de Investigación, Innovación, Desarrollo y Gestión</small></b></a>
+  <nav><a href="https://ciideg.com" target="_blank" rel="noopener">ciideg.com</a><a class="wa" href="https://wa.me/51936220771?text=Hola%20CIIDEG%2C%20vi%20el%20Observatorio%20S%C3%ADseVe" target="_blank" rel="noopener">WhatsApp</a></nav>
+</div></div>
+<div class="goldrule"></div>
 <div class="wrap">
 <header>
-  <p class="kicker">Modelo GEMSES aplicado a los reportes SíseVe 2013–2026 · corte <span id="corte"></span></p>
+  <p class="kicker">Modelo GEMSES (Gestión Moderna de los Servicios de Salud) aplicado a los reportes del SíseVe (Sistema Especializado en reporte de casos sobre Violencia Escolar, Ministerio de Educación) 2013–2026 · corte <span id="corte"></span></p>
   <h1 id="zona">Perú</h1>
   <p id="zonaSub"></p>
 </header>
@@ -117,7 +153,7 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid va
   <label>Región<select id="fR"></select></label>
   <label>Provincia<select id="fP"></select></label>
   <label>Distrito<select id="fD"></select></label>
-  <label>UGEL<select id="fU"></select></label>
+  <label title="Unidad de Gestión Educativa Local">UGEL<select id="fU"></select></label>
   <label>Gestión<select id="fG"><option value="">Todas</option><option value="0">Pública</option><option value="1">Privada</option></select></label>
   <label>Nivel<select id="fN"></select></label>
   <label class="colegio">Colegio (nombre o código modular)
@@ -129,7 +165,7 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid va
 
 <div class="kpis">
   <div class="kpi"><b id="k1">–</b><span>reportes en 2025</span></div>
-  <div class="kpi"><b id="k2">–</b><span>reportes 2026 (ene–ago)</span></div>
+  <div class="kpi"><b id="k2">–</b><span>reportes 2026 (enero a agosto)</span></div>
   <div class="kpi proj"><b id="k3">–</b><span id="k3s">cierre proyectado 2026</span></div>
   <div class="kpi"><b id="k4">–</b><span>reportes por 1,000 estudiantes, 2024 (colegios con 100+ alumnos)</span></div>
 </div>
@@ -151,7 +187,7 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid va
 
 <section>
   <h2>Qué se reporta</h2>
-  <p class="lead">Reportes por tipo de violencia (cada reporte tiene un solo tipo) y proporción donde el presunto agresor es personal de la IE.</p>
+  <p class="lead">Reportes por tipo de violencia (cada reporte tiene un solo tipo) y proporción donde el presunto agresor es personal del colegio.</p>
   <div class="panel">
     <div class="chartbox"><canvas id="cTipo" aria-label="Composición por tipo de violencia"></canvas></div>
   </div>
@@ -175,7 +211,7 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid va
       <div class="seg" role="group" aria-label="Año" id="topYear">
         <button data-y="2024" aria-pressed="false">2024</button>
         <button data-y="2025" aria-pressed="true">2025</button>
-        <button data-y="2026" aria-pressed="false">2026 ene–ago</button>
+        <button data-y="2026" aria-pressed="false">2026 enero a agosto</button>
       </div>
       <span class="note" style="margin:0" id="topNote"></span>
     </div>
@@ -194,7 +230,7 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid va
 
 <section id="estado">
   <h2>Estado de atención y seguimiento</h2>
-  <p class="lead">Los protocolos del DS 004-2018-MINEDU tienen cuatro pasos: acción, derivación, seguimiento y cierre. Un reporte sigue abierto hasta que la IE registra el cierre y la UGEL lo valida. SíseVe publica el estado solo por UGEL (reportes de enero 2024 a agosto 2026), no por colegio.</p>
+  <p class="lead">Los protocolos del Decreto Supremo 004-2018-MINEDU tienen cuatro pasos: acción, derivación, seguimiento y cierre. Un reporte sigue abierto hasta que el colegio registra el cierre y la UGEL lo valida. SíseVe publica el estado solo por UGEL (Unidad de Gestión Educativa Local) (reportes de enero 2024 a agosto 2026), no por colegio.</p>
   <div class="kpis" style="margin-top:0">
     <div class="kpi"><b id="e1">–</b><span id="e1s">reportes abiertos</span></div>
     <div class="kpi"><b id="e2">–</b><span>pendientes u observados (sin atención iniciada)</span></div>
@@ -213,7 +249,7 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid va
   </div>
   <div class="panel" style="margin-top:12px">
     <h3 style="font-size:18px;margin-bottom:4px">Embudo de cierre, 225 UGEL</h3>
-    <p class="note" style="margin:0 0 8px">Índice observado/esperado de reportes finalizados. 1.0 es el ritmo nacional; por debajo del límite inferior de 99.8 % el rezago no se explica por azar ni por antigüedad.</p>
+    <p class="note" style="margin:0 0 8px">Índice observado entre esperado de reportes finalizados. 1.0 es el ritmo nacional; por debajo del límite inferior de 99.8 % el rezago no se explica por azar ni por antigüedad.</p>
     <div class="chartbox"><canvas id="cEF" aria-label="Embudo del índice de cierre por UGEL"></canvas></div>
     <div class="tbl"><table id="tEst"></table></div>
     <p class="note" id="estNote"></p>
@@ -266,7 +302,7 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid va
       <div class="seg" role="group" aria-label="Indicador">
         <button data-m="tasa" aria-pressed="true">Tasa por 1,000</button>
         <button data-m="sexual" aria-pressed="false">% con violencia sexual</button>
-        <button data-m="personal" aria-pressed="false">% agresor personal IE</button>
+        <button data-m="personal" aria-pressed="false">% con agresor del personal del colegio</button>
       </div>
     </div>
     <div class="chartbox"><canvas id="cQuint" aria-label="Indicadores por quintil de pensión"></canvas></div>
@@ -279,10 +315,10 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid va
   <h2>Marco normativo</h2>
   <p class="lead">Normas vigentes que regulan el reporte, la atención y el tratamiento de estos datos.</p>
   <div class="norm">
-    <article><h3>Ley 29719 y su Reglamento (DS 010-2012-ED)</h3><p>Promueve la convivencia sin violencia en las instituciones educativas; ordena diagnosticar, prevenir, sancionar y erradicar el acoso entre estudiantes.</p></article>
-    <article><h3>Ley 31902 (El Peruano, 18/10/2023)</h3><p>Modifica la Ley 29719: declara de necesidad al menos un psicólogo por IE (implementación progresiva) y faculta al director a instalar videovigilancia en zonas comunes con la APAFA.</p></article>
-    <article><h3>DS 004-2018-MINEDU</h3><p>Lineamientos para la gestión de la convivencia escolar, la prevención y la atención de la violencia: protocolos de atención, responsable de convivencia, libro de registro de incidencias y reporte en el portal SíseVe.</p></article>
-    <article><h3>Ley 29988 y DS 004-2017-MINEDU</h3><p>Separación preventiva y medidas sobre personal docente y administrativo implicado en delitos contra la libertad sexual, entre otros (base del protocolo cuando el agresor es personal de la IE).</p></article>
+    <article><h3>Ley 29719 y su Reglamento (Decreto Supremo 010-2012-ED)</h3><p>Promueve la convivencia sin violencia en las instituciones educativas; ordena diagnosticar, prevenir, sancionar y erradicar el acoso entre estudiantes.</p></article>
+    <article><h3>Ley 31902 (El Peruano, 18/10/2023)</h3><p>Modifica la Ley 29719: declara de necesidad al menos un psicólogo por institución educativa (implementación progresiva) y faculta al director a instalar videovigilancia en zonas comunes con la APAFA (Asociación de Padres de Familia).</p></article>
+    <article><h3>Decreto Supremo 004-2018-MINEDU</h3><p>Lineamientos para la gestión de la convivencia escolar, la prevención y la atención de la violencia: protocolos de atención, responsable de convivencia, libro de registro de incidencias y reporte en el portal SíseVe.</p></article>
+    <article><h3>Ley 29988 y Decreto Supremo 004-2017-MINEDU</h3><p>Separación preventiva y medidas sobre personal docente y administrativo implicado en delitos contra la libertad sexual, entre otros (base del protocolo cuando el agresor es personal del colegio).</p></article>
     <article><h3>Ley 30403</h3><p>Prohíbe el castigo físico y humillante contra niñas, niños y adolescentes, incluido el ámbito escolar.</p></article>
     <article><h3>Ley 29733 y Ley 27806</h3><p>Protección de datos personales y transparencia. Por eso la fuente pública solo se publica agregada por colegio y año: los datos individuales de menores no se exponen.</p></article>
   </div>
@@ -297,14 +333,14 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid va
     <tbody>
       <tr><td>Calidad del dato</td><td>122,984 reportes cuadran al 100 % con la serie nacional 2013–2026; física + psicológica + sexual = total en todos los años</td><td>—</td><td>Se corrigió el texto que decía que un reporte podía tener varios tipos</td><td>0 discrepancias</td></tr>
       <tr><td>Precisión de la proyección</td><td>El modelo anterior sobreestimó 2025: sesgo +33 % en regiones y +50 % en UGEL; su banda de 80 % solo acertó 64–65 % de las veces</td><td>Tendencia log-lineal extrapolada con pocos años y 2022 (retorno) deprimido</td><td>Nivel ponderado 2024–2025, tendencia encogida hacia la nacional y amortiguada; variabilidad extra-Poisson calibrada por tamaño</td><td>Sesgo ≈ 0; cobertura 80 %: 84 / 84 / 83 / 79 % y 95 %: 100 / 96 / 96 / 95 % (región / UGEL / distrito / colegio)</td></tr>
-      <tr><td>Falsas alarmas por colegio</td><td>464 colegios marcados como atípicos cuando el azar explica ~14</td><td>Límites de Poisson ignoran la heterogeneidad normal entre colegios (57 % tuvo 0 reportes en 2024)</td><td>Límites exactos de binomial negativa (k = 0.51)</td><td>464 → 35 colegios señalados</td></tr>
+      <tr><td>Falsas alarmas por colegio</td><td>464 colegios marcados como atípicos cuando el azar explica ~14</td><td>Límites de Poisson ignoran la heterogeneidad normal entre colegios (57 % tuvo 0 reportes en 2024)</td><td>Límites exactos de binomial negativa (parámetro de dispersión 0.51)</td><td>464 → 35 colegios señalados</td></tr>
       <tr><td>Rezago de cierre por UGEL</td><td>30 UGEL bajo el límite; dispersión 8.6 veces la esperada</td><td>Diferencias estructurales entre UGEL no modeladas</td><td>Límites con sobredispersión multiplicativa (z winsorizados, Spiegelhalter)</td><td>30 → 11 UGEL con rezago robusto</td></tr>
       <tr><td>Intervalos de quintiles</td><td>Demasiado estrechos</td><td>Suponían reportes independientes entre colegios</td><td>Varianza binomial negativa por colegio</td><td>Intervalos más anchos y honestos</td></tr>
       <tr><td>Reproducibilidad</td><td>Cifras Monte Carlo cambiaban en cada carga</td><td>Generador aleatorio sin semilla</td><td>Semilla fija derivada de la selección</td><td>Resultados idénticos en cada consulta</td></tr>
       <tr><td>Supuesto crítico: fracción del año</td><td>El tablero anterior usaba 0.70 («setiembre a diciembre aportan cerca del 30 %»); el calendario mensual real da __FRAC_AN__</td><td>La fracción se fijó sin la serie mensual, que no estaba en la capa pública</td><td>La fracción se calcula cada semana del Excel del portal (años completos, enero hasta el mes de corte)</td><td>Con 0.70 el cierre 2026 nacional quedaba subestimado; ver la serie con la fracción corregida</td></tr>
       <tr><td>Pertinencia de tasas</td><td>Solo colegios con al menos un reporte 2013–2026; 87 % de los reportes 2024 tienen matrícula ≥ 100</td><td>Diseño de la fuente por transparencia</td><td>Declarado; tasas rotuladas</td><td>Tasas probablemente sobreestimadas</td></tr>
       <tr><td>Pertinencia económica</td><td>Pensión disponible en 1,854 de 3,854 privados con 100+ alumnos (48 %)</td><td>Identicole no publica pensión de todos</td><td>Declarado en la sección</td><td>Quintiles representan a la mitad de los privados</td></tr>
-      <tr><td>Consistencia entre fuentes</td><td>2026: 11,805 reportes (Excel del portal) vs 11,791 (transparencia)</td><td>Fechas de extracción distintas</td><td>Aceptado</td><td>0.1 %</td></tr>
+      <tr><td>Consistencia entre fuentes</td><td>2026: 11,805 reportes (Excel del portal) frente a 11,791 (transparencia)</td><td>Fechas de extracción distintas</td><td>Aceptado</td><td>0.1 %</td></tr>
       <tr><td>Criterios GEMSES</td><td>Umbrales de semáforo propuestos por el análisis</td><td>No existe estándar normativo para estos indicadores</td><td>Declarados como criterios propuestos</td><td>Validar con el equipo de convivencia</td></tr>
     </tbody>
   </table>
@@ -324,6 +360,12 @@ const AUDIT=/*__AUDIT__*/null;
   AUDIT.controles.map(c=>`<tr><td>${e(c.control)}</td><td class="${c.ok?'ok':(c.critico?'bad':'')}">${c.ok?'✔ cumple':(c.critico?'✖ falla':'⚠ advertencia')}</td><td>${e(c.detalle)}</td></tr>`).join('')+'</tbody>';
   document.getElementById('autoNote').textContent=`Auditado el ${AUDIT.fecha} · ${AUDIT.controles.filter(c=>c.ok).length} de ${AUDIT.controles.length} controles cumplen.`;})();
 </script>
+
+<aside class="cta">
+  <div><h2>De los datos al plan de mejora</h2>
+  <p>CIIDEG acompaña a UGEL, redes e instituciones educativas a convertir estos reportes en un plan de convivencia con indicadores, responsables y seguimiento, con el Modelo GEMSES.</p></div>
+  <a href="https://wa.me/51936220771?text=Hola%20CIIDEG%2C%20quiero%20conversar%20sobre%20el%20Observatorio%20S%C3%ADseVe" target="_blank" rel="noopener">Conversemos por WhatsApp</a>
+</aside>
 
 <section id="refs">
   <h2>Referencias</h2>
@@ -351,9 +393,13 @@ const AUDIT=/*__AUDIT__*/null;
 </section>
 
 <footer>
-  Fuente: SíseVe – MINEDU (reportes 2013–2026, vía acceso a la información pública; estado de atención por UGEL desde el Excel público del portal, ene 2024–ago 2026), Padrón ESCALE (matrícula 2024) e Identicole (pensión), procesados en el repositorio público
+  Fuente: SíseVe – MINEDU (reportes 2013–2026, vía acceso a la información pública; estado de atención por UGEL desde el Excel público del portal, enero 2024 a agosto 2026), Padrón ESCALE (matrícula 2024) e Identicole (pensión), procesados en el repositorio público
   <a href="https://github.com/fiorellatl/observatorio-violencia-escolar" target="_blank" rel="noopener">fiorellatl/observatorio-violencia-escolar</a>.
   El universo son colegios con al menos un reporte entre 2013 y 2026; los colegios que nunca reportaron no están en la base, lo que puede sesgar las tasas hacia arriba. Tablero oficial: <a href="https://siseve.minedu.gob.pe/Web/App/Mapa" target="_blank" rel="noopener">siseve.minedu.gob.pe</a>.
+  <div class="foot-brand"><img src="assets/logo-ciideg.webp" alt="CIIDEG" width="45" height="52">
+    <div><strong style="color:var(--ink)">CIIDEG S.A.C. · Centro de Investigación, Innovación, Desarrollo y Gestión</strong><br>
+    <a href="https://ciideg.com" target="_blank" rel="noopener">ciideg.com</a> · WhatsApp <a href="https://wa.me/51936220771" target="_blank" rel="noopener">+51 936 220 771</a> · <a href="mailto:informes.ciideg@gmail.com">informes.ciideg@gmail.com</a><br>
+    Actualización automática cada lunes desde el portal SíseVe del MINEDU · código abierto en <a href="https://github.com/carlosperez100/observatorio-siseve" target="_blank" rel="noopener">GitHub</a></div></div>
   <p class="rights">© 2026 Mg. Carlos Pérez Pérez · CIIDEG SAC. Diseño analítico, tablero y lectura bajo el <strong>Modelo GEMSES – Gestión Moderna de los Servicios de Salud</strong>, creación intelectual de Carlos Pérez Pérez, registro WIPO PE324096539. Todos los derechos reservados sobre el modelo y este análisis. Los datos de origen son públicos y pertenecen al Estado peruano (MINEDU); se citan en Referencias.</p>
 </footer>
 </div>
@@ -449,7 +495,7 @@ function forecast(series,frac){
 }
 
 // ---------- gráficos ----------
-Chart.defaults.font.family='"Public Sans",system-ui,sans-serif';Chart.defaults.font.size=12;
+Chart.defaults.font.family='Inter,system-ui,sans-serif';Chart.defaults.font.size=12;
 const whisker={id:'whisker',afterDatasetsDraw(ch){const ds=ch.data.datasets[0];if(!ds.ci)return;const ctx=ch.ctx,m=ch.getDatasetMeta(0),yS=ch.scales.y;ctx.save();ctx.strokeStyle=css('--ink');ctx.lineWidth=1.3;
   m.data.forEach((bar,i)=>{const c=ds.ci[i];if(!c)return;const x=bar.x,y1=yS.getPixelForValue(c[0]),y2=yS.getPixelForValue(c[1]);ctx.beginPath();ctx.moveTo(x,y1);ctx.lineTo(x,y2);ctx.moveTo(x-6,y1);ctx.lineTo(x+6,y1);ctx.moveTo(x-6,y2);ctx.lineTo(x+6,y2);ctx.stroke();});ctx.restore();}};
 let cS,cT,cF,cQ,qMetric='tasa';
@@ -484,7 +530,7 @@ function drawSerie(ser,fc){
   const data={labels,datasets:[
     {type:'bar',label:'Reportes',data:obs,backgroundColor:css('--accent'),stack:'a',order:5},
     {type:'bar',label:'2020–2021 (remoto)',data:pand,backgroundColor:css('--pand'),stack:'a',order:5},
-    {type:'bar',label:'2026 ene–ago',data:part,backgroundColor:css('--accent')+'88',stack:'a',order:5},
+    {type:'bar',label:'2026 enero a agosto',data:part,backgroundColor:css('--accent')+'88',stack:'a',order:5},
     {type:'line',label:'95 % inf',data:pick('p025'),borderWidth:0,pointRadius:0,fill:false,order:3},
     {type:'line',label:'Banda 95 %',data:pick('p975'),borderWidth:0,pointRadius:0,backgroundColor:proj+'22',fill:'-1',order:3},
     {type:'line',label:'80 % inf',data:pick('p10'),borderWidth:0,pointRadius:0,fill:false,order:2},
@@ -501,16 +547,16 @@ function drawSerie(ser,fc){
   st2.innerHTML=`<div><b>${pc(g[1])}</b>2026 frente a 2025 (80 %: ${pc(g[0])} a ${pc(g[2])})</div>
    <div><b>${nf.format(Math.round(fc.band[2027].p50))}</b>2027 · 80 %: ${nf.format(Math.round(fc.band[2027].p10))}–${nf.format(Math.round(fc.band[2027].p90))}</div>
    <div><b>${nf.format(Math.round(fc.band[2028].p50))}</b>2028 · 80 %: ${nf.format(Math.round(fc.band[2028].p10))}–${nf.format(Math.round(fc.band[2028].p90))}</div>
-   <div><b>${nf1.format(fc.m.w*100)} %</b>peso de la tendencia propia; el resto se toma de la tendencia nacional (τ² = ${fc.m.t2.toFixed(3)})</div>`;
+   <div><b>${nf1.format(fc.m.w*100)} %</b>peso de la tendencia propia; el resto se toma de la tendencia nacional (variabilidad entre zonas: ${fc.m.t2.toFixed(3)})</div>`;
 }
 function drawTipo(set){
   const k=i=>TYY.map(y=>set.reduce((a,s)=>a+tyv(s,y,i),0));
   const totY=TYY.map(y=>set.reduce((a,s)=>a+tot(s,y),0));const pers=k(4).map((v,i)=>totY[i]?v/totY[i]*100:null);
-  const data={labels:TYY.map(y=>y===2026?'2026*':String(y)),datasets:[
+  const data={labels:TYY.map(y=>y===2026?'2026 parcial':String(y)),datasets:[
     {type:'bar',label:'Física',data:k(0),backgroundColor:css('--fis'),stack:'t',yAxisID:'y'},
     {type:'bar',label:'Psicológica',data:k(1),backgroundColor:css('--psi'),stack:'t',yAxisID:'y'},
     {type:'bar',label:'Sexual',data:k(2),backgroundColor:css('--sex'),stack:'t',yAxisID:'y'},
-    {type:'line',label:'% agresor personal IE',data:pers,borderColor:css('--ink'),pointRadius:3,yAxisID:'y2'}]};
+    {type:'line',label:'% con agresor del personal del colegio',data:pers,borderColor:css('--ink'),pointRadius:3,yAxisID:'y2'}]};
   const o=baseOpts();o.scales.x.stacked=true;o.scales.y.stacked=true;
   o.scales.y2={position:'right',beginAtZero:true,max:100,grid:{display:false},ticks:{color:css('--muted'),callback:v=>v+' %'}};
   o.plugins.tooltip.callbacks={label:i=>i.dataset.yAxisID==='y2'?`${i.dataset.label}: ${nf1.format(i.raw)} %`:`${i.dataset.label}: ${nf.format(i.raw)}`};
@@ -539,9 +585,9 @@ function drawFunnel(zone){
   o.scales.y.title={display:true,text:'Reportes por 1,000 estudiantes',color:css('--muted')};
   const yMax=Math.max(p0*1000*4,...[...hi,...sel].map(p=>p.y).slice(0,1));o.scales.y.suggestedMax=yMax;
   o.plugins.legend.labels.filter=i=>!/inf$/.test(i.text);
-  o.plugins.tooltip={mode:'nearest',intersect:true,callbacks:{label:i=>i.raw.s?`${i.raw.s.n} (${L.n[i.raw.s.nv]}): ${nf1.format(i.raw.y)} por 1,000 · ${nf.format(i.raw.s.m)} est.`:i.dataset.label}};
+  o.plugins.tooltip={mode:'nearest',intersect:true,callbacks:{label:i=>i.raw.s?`${i.raw.s.n} (${L.n[i.raw.s.nv]}): ${nf1.format(i.raw.y)} por 1,000 · ${nf.format(i.raw.s.m)} estudiantes`:i.dataset.label}};
   if(cF){cF.data=data;cF.options=o;cF.update();}else cF=new Chart($('cFunnel'),{data,options:o});
-  $('funnelNote').textContent=pts.length?`${nf.format(pts.length)} colegios · tasa de la zona ${nf1.format(p0*1000)} por 1,000 · ${flagged.length} sobre el límite de 99.9 % (binomial negativa, k = ${KNB.toFixed(2)}).`:'No hay colegios con matrícula registrada ≥ 100 en esta selección.';
+  $('funnelNote').textContent=pts.length?`${nf.format(pts.length)} colegios · tasa de la zona ${nf1.format(p0*1000)} por 1,000 · ${flagged.length} sobre el límite de 99.9 % (binomial negativa, parámetro de dispersión ${KNB.toFixed(2)}).`:'No hay colegios con matrícula registrada ≥ 100 en esta selección.';
   flagged.sort((a,b)=>b[1]-a[1]);
   $('flagged').innerHTML=flagged.slice(0,8).map(([s,rt,r])=>`<li>${s.n} · ${L.n[s.nv]} · ${L.d[s.d]}: ${r} reportes, ${nf1.format(rt)} por 1,000</li>`).join('')+(flagged.length>8?`<li>y ${flagged.length-8} más</li>`:'');
 }
@@ -550,7 +596,7 @@ const penAll=S.filter(s=>s.g===1&&s.pen>0&&s.m>=100).map(s=>s.pen);
 const CUT=[.2,.4,.6,.8].map(p=>q(penAll,p));
 function qOf(p){let i=0;while(i<4&&p>CUT[i])i++;return i;}
 function drawQuint(zone){
-  const groups=[{k:'Públicos',f:s=>s.g===0},...[0,1,2,3,4].map(i=>({k:'Q'+(i+1),f:s=>s.g===1&&s.pen>0&&qOf(s.pen)===i}))];
+  const groups=[{k:'Públicos',f:s=>s.g===0},...[0,1,2,3,4].map(i=>({k:'Quintil '+(i+1),f:s=>s.g===1&&s.pen>0&&qOf(s.pen)===i}))];
   const rng=['gratuito',`≤ S/ ${Math.round(CUT[0])}`,`S/ ${Math.round(CUT[0])+1}–${Math.round(CUT[1])}`,`S/ ${Math.round(CUT[1])+1}–${Math.round(CUT[2])}`,`S/ ${Math.round(CUT[2])+1}–${Math.round(CUT[3])}`,`> S/ ${Math.round(CUT[3])}`];
   const base=zone.filter(s=>s.m>=100);const selG=st.c!==null?(S[st.c].g===0?0:(S[st.c].pen>0?qOf(S[st.c].pen)+1:-1)):-1;
   const rows=groups.map((g,i)=>{const ss=base.filter(g.f);const m=ss.reduce((a,s)=>a+s.m,0),r=ss.reduce((a,s)=>a+tot(s,2024),0);
@@ -561,14 +607,14 @@ function drawQuint(zone){
   const val=rows.map(r=>qMetric==='tasa'?r.rate:qMetric==='sexual'?r.sx:r.pe);
   const ci=rows.map(r=>qMetric==='tasa'?r.ci:qMetric==='sexual'?r.sxci:r.peci);
   const cols=rows.map((r,i)=>i===selG?css('--proj'):i===0?css('--muted'):css('--accent'));
-  const ylab=qMetric==='tasa'?'Reportes por 1,000 estudiantes':qMetric==='sexual'?'% de reportes con violencia sexual':'% de reportes con agresor personal IE';
+  const ylab=qMetric==='tasa'?'Reportes por 1,000 estudiantes':qMetric==='sexual'?'% de reportes con violencia sexual':'% de reportes con agresor del personal del colegio';
   const data={labels:rows.map(r=>[r.k,r.rng]),datasets:[{label:ylab,data:val,backgroundColor:cols,ci}]};
   const o=baseOpts();o.plugins.legend.display=false;o.scales.y.title={display:true,text:ylab,color:css('--muted')};
   o.scales.y.suggestedMax=Math.max(...ci.filter(Boolean).map(c=>c[1]),0)*1.05;
   o.plugins.tooltip={callbacks:{label:i=>{const r=rows[i.dataIndex];return `${nf1.format(i.raw??0)}${qMetric==='tasa'?' por 1,000':' %'} · ${nf.format(r.n)} colegios · ${nf.format(r.r)} reportes`;}}};
   if(cQ){cQ.data=data;cQ.options=o;cQ.update();}else cQ=new Chart($('cQuint'),{type:'bar',data,options:o,plugins:[whisker]});
   const f=(v,s='')=>v==null?'—':nf1.format(v)+s;
-  $('tQuint').innerHTML=`<thead><tr><th>Grupo</th><th>Pensión</th><th>Colegios</th><th>Matrícula</th><th>Reportes 2024</th><th>Tasa ‰</th><th>IC 95 %</th><th>% sexual</th><th>% personal IE</th></tr></thead><tbody>`+
+  $('tQuint').innerHTML=`<thead><tr><th>Grupo</th><th>Pensión</th><th>Colegios</th><th>Matrícula</th><th>Reportes 2024</th><th>Reportes por 1,000 estudiantes</th><th>Intervalo de confianza 95 %</th><th>% sexual</th><th>% con agresor del personal del colegio</th></tr></thead><tbody>`+
     rows.map(r=>`<tr><td>${r.k}</td><td>${r.rng}</td><td>${nf.format(r.n)}</td><td>${nf.format(r.m)}</td><td>${nf.format(r.r)}</td><td>${f(r.rate)}</td><td>${r.ci?nf1.format(r.ci[0])+'–'+nf1.format(r.ci[1]):'—'}</td><td>${f(r.sx,' %')}</td><td>${f(r.pe,' %')}</td></tr>`).join('')+'</tbody>';
   const small=rows.filter(r=>r.k!=='Públicos'&&r.n<15).length;
   $('quintNote').innerHTML=`Cortes nacionales de pensión calculados sobre ${nf.format(penAll.length)} colegios privados con pensión registrada y matrícula ≥ 100. Los intervalos de la tasa incluyen la heterogeneidad entre colegios (binomial negativa); los porcentajes usan aproximación binomial. Los privados sin pensión registrada quedan fuera de los quintiles.${small?` <span class="warn">${small} quintil(es) con menos de 15 colegios en esta zona: interpretar con cautela.</span>`:''}${selG>=0?' La barra ámbar es el grupo del colegio elegido.':''}`;
@@ -592,7 +638,7 @@ function drawEstado(zone){
   $('e2').textContent=T?nf.format(N):'—';$('e3').textContent=T?nf.format(P):'—';
   const oe=E?F/E:null,z=V?(F-E)/Math.sqrt(V):0;
   $('e4').textContent=oe?nf.format(Math.round(oe*100)/100):'—';
-  $('e4s').textContent=oe?`índice de cierre (O/E) · ${oe<1?nf.format(Math.round(E-F))+' cierres por debajo de lo esperado':'al ritmo nacional o mejor'}`:'índice de cierre ajustado por antigüedad';
+  $('e4s').textContent=oe?`índice de cierre (observado entre esperado) · ${oe<1?nf.format(Math.round(E-F))+' cierres por debajo de lo esperado':'al ritmo nacional o mejor'}`:'índice de cierre ajustado por antigüedad';
   // curva de maduración
   const ink=css('--ink'),mut=css('--muted');
   const dM={labels:MAT.map(x=>x[0]),datasets:[
@@ -613,7 +659,7 @@ function drawEstado(zone){
   const oE=baseOpts();oE.indexAxis='y';oE.scales.x={stacked:true,min:0,max:100,grid:{color:css('--rule')},ticks:{color:mut,callback:v=>v+' %'}};
   oE.scales.y={stacked:true,grid:{display:false},ticks:{color:ink,autoSkip:false}};
   oE.plugins.tooltip.callbacks={label:i=>{const u=top[i.dataIndex];const k=['fin','proc','pend'][i.datasetIndex];return `${i.dataset.label}: ${nf.format(u[k])} (${nf1.format(i.raw)} %)`;},
-    afterBody:it=>{const u=top[it[0].dataIndex];return `Esperado finalizado: ${nf1.format(u.E/u.tot*100)} % · O/E ${nf.format(Math.round(u.oe*100)/100)}`;}};
+    afterBody:it=>{const u=top[it[0].dataIndex];return `Esperado finalizado: ${nf1.format(u.E/u.tot*100)} % · índice de cierre ${nf.format(Math.round(u.oe*100)/100)}`;}};
   if(cE){cE.data=dE;cE.options=oE;cE.update();}else cE=new Chart($('cEst'),{type:'bar',data:dE,options:oE,plugins:[expMark]});
   // embudo de cierre
   const maxE=Math.max(...UG.map(u=>u.E));const lim=(z,s)=>{const a=[];for(let i=0;i<=60;i++){const e=5*Math.pow(maxE/5,i/60);a.push({x:e,y:1+s*z*Math.sqrt(PHIU*K*e)/e});}return a;};
@@ -630,10 +676,10 @@ function drawEstado(zone){
   const oF=baseOpts();oF.scales.x={type:'logarithmic',title:{display:true,text:'Cierres esperados (escala log)',color:mut},grid:{color:css('--rule')},ticks:{color:mut}};
   oF.scales.y={min:0.3,max:1.3,grid:{color:css('--rule')},ticks:{color:mut},title:{display:true,text:'Observado / esperado',color:mut}};
   oF.plugins.legend.labels.filter=i=>!/sup$/.test(i.text);
-  oF.plugins.tooltip={mode:'nearest',intersect:true,callbacks:{label:i=>i.raw.u?`${i.raw.u.name}: O/E ${nf.format(Math.round(i.raw.u.oe*100)/100)} · ${nf.format(i.raw.u.proc+i.raw.u.pend)} abiertos de ${nf.format(i.raw.u.tot)}`:i.dataset.label}};
+  oF.plugins.tooltip={mode:'nearest',intersect:true,callbacks:{label:i=>i.raw.u?`${i.raw.u.name}: índice de cierre ${nf.format(Math.round(i.raw.u.oe*100)/100)} · ${nf.format(i.raw.u.proc+i.raw.u.pend)} abiertos de ${nf.format(i.raw.u.tot)}`:i.dataset.label}};
   if(cEF){cEF.data=dF;cEF.options=oF;cEF.update();}else cEF=new Chart($('cEF'),{data:dF,options:oF});
   // tabla
-  $('tEst').innerHTML='<thead><tr><th>UGEL</th><th>Reportes</th><th>Finalizados</th><th>En proceso</th><th>Pendientes</th><th>% abierto</th><th>% esperado fin.</th><th>O/E</th><th>Brecha</th></tr></thead><tbody>'+
+  $('tEst').innerHTML='<thead><tr><th>UGEL</th><th>Reportes</th><th>Finalizados</th><th>En proceso</th><th>Pendientes</th><th>% abierto</th><th>% esperado finalizado</th><th>Índice de cierre</th><th>Brecha</th></tr></thead><tbody>'+
     sel.slice(0,25).map(u=>`<tr><td>${u.name}</td><td>${nf.format(u.tot)}</td><td>${nf.format(u.fin)}</td><td>${nf.format(u.proc)}</td><td>${nf.format(u.pend)}</td><td>${nf1.format((u.proc+u.pend)/u.tot*100)} %</td><td>${nf1.format(u.E/u.tot*100)} %</td><td class="${lowL(u)?'warn':''}">${nf.format(Math.round(u.oe*100)/100)}</td><td>${u.E>u.fin?nf.format(Math.round(u.E-u.fin)):'—'}</td></tr>`).join('')+'</tbody>';
   const nLow=UG.filter(lowL).length;
   $('estNote').innerHTML=`Cierre esperado por cohorte según la curva nacional: reportes de 2024 ${pc(EC[0]*100)}, de 2025 ${pc(EC[1]*100)}, de 2026 ${pc(EC[2]*100)}. «Brecha» = cierres que faltan respecto del ritmo nacional. ${nLow} UGEL del país están bajo el límite de 99.8 % (límites ajustados por sobredispersión, φ = ${nf1.format(PHIU)}).${sel.length>25?` Tabla limitada a las 25 UGEL con más reportes abiertos.`:''} Los filtros de gestión y nivel no aplican aquí: el estado solo se publica por UGEL.`;
@@ -648,7 +694,7 @@ function qCoh(lo,hi,h){let num=0,den=0;for(let m=lo;m<=hi;m++){const w=MAT[m][1]
 const COH=[[20,31],[8,19],[0,7]];
 function rbinom(n,p){if(n<=0||p<=0)return 0;if(p>=1)return n;if(n<60){let k=0;for(let i=0;i<n;i++)if(R()<p)k++;return k;}return Math.min(n,Math.max(0,Math.round(n*p+Math.sqrt(n*p*(1-p))*randn())));}
 let cMC,cBL,LAST={};
-const vline={id:'vline',afterDatasetsDraw(ch,a,o){if(o.x==null)return;const x=ch.scales.x.getPixelForValue(o.x);const ctx=ch.ctx;ctx.save();ctx.strokeStyle=css('--ink');ctx.setLineDash([4,3]);ctx.beginPath();ctx.moveTo(x,ch.chartArea.top);ctx.lineTo(x,ch.chartArea.bottom);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=css('--ink');ctx.font='12px "Public Sans",sans-serif';ctx.fillText(o.label||'',Math.min(x+4,ch.chartArea.right-60),ch.chartArea.top+12);ctx.restore();}};
+const vline={id:'vline',afterDatasetsDraw(ch,a,o){if(o.x==null)return;const x=ch.scales.x.getPixelForValue(o.x);const ctx=ch.ctx;ctx.save();ctx.strokeStyle=css('--ink');ctx.setLineDash([4,3]);ctx.beginPath();ctx.moveTo(x,ch.chartArea.top);ctx.lineTo(x,ch.chartArea.bottom);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=css('--ink');ctx.font='12px Inter,sans-serif';ctx.fillText(o.label||'',Math.min(x+4,ch.chartArea.right-60),ch.chartArea.top+12);ctx.restore();}};
 function drawMC(ser,fc){
   const box=$('mcStats');
   if(!fc){box.innerHTML='<div class="warn">Sin base suficiente para simular en esta selección.</div>';if(cMC){cMC.data={labels:[],datasets:[]};cMC.update();}LAST.p26=null;LAST.p27=null;return;}
@@ -710,22 +756,22 @@ function drawGemses(zone,set,fc){
   const z=estadoZone(zone),pc=v=>v==null?'—':nf1.format(v*100)+' %';
   const withM=set.filter(s=>s.m>=100),mat=withM.reduce((a,s)=>a+s.m,0),r24=withM.reduce((a,s)=>a+tot(s,2024),0);
   const all24=set.reduce((a,s)=>a+tot(s,2024),0),pers=all24?set.reduce((a,s)=>a+tyv(s,2024,4),0)/all24:null,sex=all24?set.reduce((a,s)=>a+tyv(s,2024,2),0)/all24:null;
-  $('gmExp').innerHTML=ind('Reportes por 1,000 estudiantes, 2024 (acceso al canal de denuncia)',mat?`${nf1.format(r24/mat*1000)} · nac. ${nf1.format(NAT24.rate)}`:'—')+
-    ind('Reportes con agresor del personal de la IE, 2024',pers==null?'—':`${pc(pers)} · nac. ${pc(NAT24.pers)}`,sem(pers,NAT24.pers*1.1,NAT24.pers*1.35,false))+
+  $('gmExp').innerHTML=ind('Reportes por 1,000 estudiantes, 2024 (acceso al canal de denuncia)',mat?`${nf1.format(r24/mat*1000)} · promedio nacional ${nf1.format(NAT24.rate)}`:'—')+
+    ind('Reportes con agresor del personal del colegio, 2024',pers==null?'—':`${pc(pers)} · promedio nacional ${pc(NAT24.pers)}`,sem(pers,NAT24.pers*1.1,NAT24.pers*1.35,false))+
     ind('Reportes con violencia sexual, 2024',pc(sex));
   $('gmEst').innerHTML=ind('Variación anual estimada (modelo)',fc?(fc.growth[1]>=0?'+':'')+nf1.format(fc.growth[1]*100)+' %':'—')+
     ind('Cierre proyectado 2026 (mediana)',fc?nf.format(Math.round(fc.band[2026].p50)):'—')+
     ind('P(2026 supera a 2025), Monte Carlo',LAST.p26==null?'—':nf1.format(LAST.p26)+' %')+
     ind('P(2027 supera a 2025), Monte Carlo',LAST.p27==null?'—':nf1.format(LAST.p27)+' %');
-  $('gmMis').innerHTML=ind('Pendientes u observados (sin atención iniciada)',z.tot?`${pc(z.pend/z.tot)} · nac. ${pc(NATS.pend)}`:'—',z.tot?sem(z.pend/z.tot,NATS.pend,NATS.pend*1.6,false):'')+
-    ind('Índice de cierre ajustado (O/E)',z.oe?nf.format(Math.round(z.oe*100)/100):'—',sem(z.oe,.97,.9,true))+
+  $('gmMis').innerHTML=ind('Pendientes u observados (sin atención iniciada)',z.tot?`${pc(z.pend/z.tot)} · promedio nacional ${pc(NATS.pend)}`:'—',z.tot?sem(z.pend/z.tot,NATS.pend,NATS.pend*1.6,false):'')+
+    ind('Índice de cierre ajustado (observado entre esperado)',z.oe?nf.format(Math.round(z.oe*100)/100):'—',sem(z.oe,.97,.9,true))+
     ind('Reportes abiertos',z.tot?`${nf.format(z.open)} (${pc(z.open/z.tot)})`:'—');
   const bl=LAST.bl;
   $('gmSop').innerHTML=ind('UGEL que atienden la zona',nf.format(z.sel.length))+
     ind('Brecha de cierres frente al ritmo nacional',z.E>z.fin?nf.format(Math.round(z.E-z.fin)):'0',sem(z.E?(z.E-z.fin)/z.E:null,0.02,0.08,false))+
     ind('Abiertos proyectados a 12 meses (Monte Carlo)',bl?nf.format(Math.round(bl.m12)):'—')+
-    ind('Respaldo normativo: psicólogo por IE (Ley 31902)','progresivo');
-  $('gmSat').innerHTML=ind('Reportes con atención finalizada',z.tot?`${pc(z.fin/z.tot)} · nac. ${pc(NATS.fin)}`:'—',z.tot?sem(z.oe,.97,.9,true):'')+
+    ind('Respaldo normativo: psicólogo por institución educativa (Ley 31902)','progresivo');
+  $('gmSat').innerHTML=ind('Reportes con atención finalizada',z.tot?`${pc(z.fin/z.tot)} · promedio nacional ${pc(NATS.fin)}`:'—',z.tot?sem(z.oe,.97,.9,true):'')+
     ind('Probabilidad de reducir los abiertos a la mitad en 6 meses',bl?nf1.format(bl.half)+' %'+(bl.halfImp!=null?` → ${nf1.format(bl.halfImp)} % con refuerzo`:''):'—');
 }
 
@@ -747,21 +793,21 @@ function drawColegios(zone){
     {label:'Psicológica',data:kk(1),backgroundColor:css('--psi'),borderColor:css('--ink'),borderWidth:bw},
     {label:'Sexual',data:kk(2),backgroundColor:css('--sex'),borderColor:css('--ink'),borderWidth:bw}]};
   const o=baseOpts();o.indexAxis='y';o.scales.x.stacked=true;o.scales.y.stacked=true;o.scales.y.ticks.autoSkip=false;
-  o.scales.x.title={display:true,text:`Reportes ${topY===2026?'2026 (ene–ago)':topY}`,color:css('--muted')};
+  o.scales.x.title={display:true,text:`Reportes ${topY===2026?'2026 (enero a agosto)':topY}`,color:css('--muted')};
   o.plugins.tooltip={mode:'index',intersect:false,callbacks:{title:i=>{const s=top[i[0].dataIndex];return `${s.n} (${L.n[s.nv]})`;},
-    footer:i=>{const s=top[i[0].dataIndex];return `Total ${nf.format(tot(s,topY))} · ${L.d[s.d]} · ${L.u[s.u]}${s.m?` · ${nf.format(s.m)} est.`:''}`;}}};
+    footer:i=>{const s=top[i[0].dataIndex];return `Total ${nf.format(tot(s,topY))} · ${L.d[s.d]} · ${L.u[s.u]}${s.m?` · ${nf.format(s.m)} estudiantes`:''}`;}}};
   o.onClick=(e,els)=>{if(els.length)pick(top[els[0].index]);};
   o.onHover=(e,els)=>{e.native.target.style.cursor=els.length?'pointer':'default';};
   if(cTop){cTop.data=data;cTop.options=o;cTop.update();}else cTop=new Chart($('cTop'),{type:'bar',data,options:o});
   const zt=zone.reduce((a,s)=>a+tot(s,topY),0),tt=top.reduce((a,s)=>a+tot(s,topY),0);
-  $('topNote').textContent=top.length?`Estos ${top.length} colegios concentran ${nf1.format(zt?tt/zt*100:0)} % de los ${nf.format(zt)} reportes de la zona en ${topY===2026?'2026 (ene–ago)':topY}.`:'Sin reportes en la zona para ese año.';
+  $('topNote').textContent=top.length?`Estos ${top.length} colegios concentran ${nf1.format(zt?tt/zt*100:0)} % de los ${nf.format(zt)} reportes de la zona en ${topY===2026?'2026 (enero a agosto)':topY}.`:'Sin reportes en la zona para ese año.';
   // mapa de calor
   const w=s=>[2022,2023,2024,2025,2026].reduce((a,y)=>a+tot(s,y),0);
   const hz=zone.filter(s=>w(s)>0).sort((a,b)=>w(b)-w(a)).slice(0,25);
   const yrs=Y.filter(y=>y>=2016);const mx=Math.max(1,...hz.flatMap(s=>yrs.map(y=>tot(s,y))));
   const acc=css('--accent');
   const cell=v=>{if(!v)return `<td style="color:var(--muted)">·</td>`;const a=.12+.88*Math.sqrt(v/mx);return `<td style="background:${acc}${Math.round(a*255).toString(16).padStart(2,'0')};color:${a>.55?'#fff':'var(--ink)'}">${v}</td>`;};
-  $('heat').innerHTML=`<thead><tr><th>Colegio</th>${yrs.map(y=>`<th>${y===2026?'2026*':y}</th>`).join('')}</tr></thead><tbody>`+
+  $('heat').innerHTML=`<thead><tr><th>Colegio</th>${yrs.map(y=>`<th>${y===2026?'2026 parcial':y}</th>`).join('')}</tr></thead><tbody>`+
     hz.map(s=>`<tr data-i="${S.indexOf(s)}"${s===selS?' class="sel"':''}><td title="${s.n} · ${L.n[s.nv]} · ${L.d[s.d]}">${s.n} <small style="color:var(--muted)">${L.n[s.nv].split(' ')[0]}</small></td>${yrs.map(y=>cell(tot(s,y))).join('')}</tr>`).join('')+'</tbody>';
   drawRadio(selS);
 }
@@ -779,7 +825,7 @@ function drawRadio(s){
   const peers=S.filter(x=>x.u===s.u&&x.nv===s.nv&&x!==s);
   const avg=Y.map(y=>peers.length?peers.reduce((a,x)=>a+tot(x,y),0)/peers.length:null);
   const p90=Y.map(y=>peers.length?q(peers.map(x=>tot(x,y)),.9):null);
-  const data={labels:Y.map(y=>y===2026?'2026*':String(y)),datasets:[
+  const data={labels:Y.map(y=>y===2026?'2026 parcial':String(y)),datasets:[
     {type:'bar',label:'Reportes del colegio',data:Y.map(y=>tot(s,y)),backgroundColor:Y.map(y=>y===2020||y===2021?css('--pand'):css('--proj')),order:2},
     {type:'line',label:'Promedio de comparables',data:avg,borderColor:css('--accent'),backgroundColor:css('--accent'),pointRadius:2,borderWidth:2,order:1},
     {type:'line',label:'Percentil 90 de comparables',data:p90,borderColor:css('--muted'),borderDash:[5,4],pointRadius:0,borderWidth:1.5,order:1}]};
@@ -796,8 +842,8 @@ function drawRadio(s){
     pos=`<p class="note" style="margin-top:6px"><b style="color:var(--ink)">${nf1.format(me)} reportes por 1,000 estudiantes en 2024.</b> Más que ${pct} % de los ${nf.format(pool.length)} colegios de ${L.u[s.u]} con 100+ estudiantes.</p><div class="gauge"><i style="left:${pct}%"></i></div><p class="note" style="margin:0;display:flex;justify-content:space-between"><span>menos reportes</span><span>más reportes</span></p>`;}
   else pos=`<p class="note">Sin tasa comparable: ${s.m<100?'matrícula 2024 menor de 100 o no registrada':'menos de 10 colegios con matrícula en la UGEL'}.</p>`;
   const pe=k(4),T=TYY.reduce((a,y)=>a+tot(s,y),0);
-  $('pos').innerHTML=pos+(T?`<p class="note">${nf1.format(pe/T*100)} % de sus reportes 2022–2026 tienen como presunto agresor a personal de la IE.</p>`:'');
-  $('radNote').textContent=`Comparables: ${nf.format(peers.length)} colegios de ${L.n[s.nv]} en ${L.u[s.u]} con al menos un reporte desde 2013. 2026* = enero a agosto. El colegio no se compara con los que nunca reportaron, porque no están en la fuente.`;
+  $('pos').innerHTML=pos+(T?`<p class="note">${nf1.format(pe/T*100)} % de sus reportes 2022–2026 tienen como presunto agresor a personal del colegio.</p>`:'');
+  $('radNote').textContent=`Comparables: ${nf.format(peers.length)} colegios de ${L.n[s.nv]} en ${L.u[s.u]} con al menos un reporte desde 2013. 2026 parcial = enero a agosto. El colegio no se compara con los que nunca reportaron, porque no están en la fuente.`;
 }
 
 refreshSelects();update();

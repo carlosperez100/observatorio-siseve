@@ -53,7 +53,7 @@ def main():
     # 4. Total de reportes = suma por colegio
     suma = sum(sum(r[10]) for r in S)
     ctrl("Total de reportes cuadra con la suma por colegio", suma == base["meta"]["reportes"],
-         f"suma por colegio {suma:,} vs meta {base['meta']['reportes']:,}")
+         f"suma por colegio {suma:,} frente a meta {base['meta']['reportes']:,}")
 
     # 5. Física + psicológica + sexual = total, cada año con tipos
     desc = 0
@@ -80,14 +80,14 @@ def main():
 
     # 8. Curva de cierre = mismo universo que el estado
     tU, tM = sum(u[1] for u in U), sum(m[1] for m in est["MAT"])
-    ctrl("Curva de cierre y estado usan el mismo universo", tU == tM, f"estado {tU:,} vs curva {tM:,}")
+    ctrl("Curva de cierre y estado usan el mismo universo", tU == tM, f"estado {tU:,} frente a curva {tM:,}")
 
-    # 9. Coherencia entre fuentes: 2026 por colegio vs Excel del portal
+    # 9. Coherencia entre fuentes: 2026 por colegio frente a Excel del portal
     i26 = years.index(2026)
     col26, por26 = sum(r[10][i26] for r in S), sum(u[4] for u in U)
     dif = abs(col26 - por26) / max(por26, 1) * 100
-    ctrl("2026: base por colegio vs Excel del portal", dif <= 2,
-         f"{col26:,} vs {por26:,} ({dif:.1f} %); las fechas de extracción difieren", critico=False)
+    ctrl("2026: base por colegio frente a Excel del portal", dif <= 2,
+         f"{col26:,} frente a {por26:,} ({dif:.1f} %); las fechas de extracción difieren", critico=False)
 
     # 10. Privacidad: ningún campo ni texto personal en lo que se publica
     txt = json.dumps({k: v for k, v in base.items() if k != "s"}, ensure_ascii=False) + json.dumps(est, ensure_ascii=False)
@@ -96,7 +96,7 @@ def main():
     ctrl("Solo datos agregados por colegio y año", all(isinstance(v, int) for r in S for v in r[10]),
          "cada valor es un conteo; no hay filas por caso")
 
-    # 10b. Serie mensual del portal vs base por colegio (años completos)
+    # 10b. Serie mensual del portal frente a base por colegio (años completos)
     mp = DATA / "mensual.json"
     if mp.exists():
         mn = json.loads(mp.read_text(encoding="utf-8"))["nac"]
@@ -104,7 +104,7 @@ def main():
         for a in (2024, 2025):
             m_a = sum(v for k, v in mn.items() if int(k[:4]) == a)
             b_a = sum(r[10][years.index(a)] for r in S)
-            difs.append(f"{a}: portal {m_a:,} vs colegios {b_a:,}")
+            difs.append(f"{a}: portal {m_a:,} frente a colegios {b_a:,}")
         ctrl("Serie mensual del portal cuadra con la base por colegio", all(
             sum(v for k, v in mn.items() if int(k[:4]) == a) == sum(r[10][years.index(a)] for r in S) for a in (2024, 2025)),
             "; ".join(difs))

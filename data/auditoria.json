@@ -23,7 +23,7 @@
    "control": "Total de reportes cuadra con la suma por colegio",
    "ok": true,
    "critico": true,
-   "detalle": "suma por colegio 122,984 vs meta 122,984"
+   "detalle": "suma por colegio 122,984 frente a meta 122,984"
   },
   {
    "control": "Tipos suman el total (2022–2026)",
@@ -47,13 +47,13 @@
    "control": "Curva de cierre y estado usan el mismo universo",
    "ok": true,
    "critico": true,
-   "detalle": "estado 50,633 vs curva 50,633"
+   "detalle": "estado 50,633 frente a curva 50,633"
   },
   {
-   "control": "2026: base por colegio vs Excel del portal",
+   "control": "2026: base por colegio frente a Excel del portal",
    "ok": true,
    "critico": false,
-   "detalle": "11,791 vs 11,805 (0.1 %); las fechas de extracción difieren"
+   "detalle": "11,791 frente a 11,805 (0.1 %); las fechas de extracción difieren"
   },
   {
    "control": "Sin campos de datos personales",
@@ -71,7 +71,7 @@
    "control": "Serie mensual del portal cuadra con la base por colegio",
    "ok": true,
    "critico": true,
-   "detalle": "2024: portal 19,297 vs colegios 19,297; 2025: portal 19,531 vs colegios 19,531"
+   "detalle": "2024: portal 19,297 frente a colegios 19,297; 2025: portal 19,531 frente a colegios 19,531"
   },
   {
    "control": "Fracción del año dentro del rango del control (0.45–0.75)",
