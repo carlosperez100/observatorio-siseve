@@ -126,6 +126,25 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid va
 .brandbar nav a.wa{background:var(--gold);border-color:var(--gold);color:#142233}
 @media(max-width:759px){.filters{position:static}}
 @media(max-width:600px){.brandbar .logo small{display:none}.brandbar .logo img{height:34px}.brandbar nav a{padding:5px 10px}}
+.sharebar{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:8px}
+.sharebar button,.tbtns button,.brandbar nav button{font:inherit;font-size:13px;font-weight:600;border-radius:99px;padding:6px 12px;cursor:pointer;border:1px solid var(--rule);background:var(--card);color:var(--ink)}
+.sharebar button.pri{background:var(--brand);border-color:var(--brand);color:#fff}
+.brandbar nav button{background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}
+.tbtns{display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap}
+th.sortable{cursor:pointer;user-select:none;white-space:nowrap}th.sortable:hover{color:var(--ink)}
+th.sortable::after{content:" ↕";opacity:.35}th.sortable[data-dir="asc"]::after{content:" ▲";opacity:1}th.sortable[data-dir="desc"]::after{content:" ▼";opacity:1}
+tr.frow th{padding:4px}tr.frow input{width:100%;min-width:60px;font:inherit;font-size:12px;padding:4px 6px;border:1px solid var(--rule);border-radius:4px;background:var(--paper);color:var(--ink)}
+.tcount{font-size:12px;color:var(--muted);margin:6px 0 0}
+.coltab{min-width:1500px}.coltab tbody tr{cursor:pointer}.coltab tbody tr:hover td{background:var(--paper)}.coltab td{white-space:nowrap}
+dialog#shareDlg{border:0;border-radius:14px;padding:0;max-width:min(560px,94vw);width:100%;background:var(--card);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog#shareDlg::backdrop{background:rgba(10,20,35,.55)}
+#shareDlg .hd{background:var(--brand);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+#shareDlg .hd button{background:none;border:0;color:#fff;font-size:22px;cursor:pointer}
+#shareDlg .bd{padding:14px 16px;display:grid;gap:10px}
+#shareDlg img{width:100%;border:1px solid var(--rule);border-radius:8px}
+#shareDlg .links{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+#shareDlg .links a,#shareDlg .links button{display:block;text-align:center;text-decoration:none;font:inherit;font-size:14px;font-weight:600;border-radius:8px;padding:10px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);cursor:pointer}
+#shareDlg .links .wa{background:#25D366;border-color:#25D366;color:#fff}#shareDlg .links .dl{background:var(--gold);border-color:var(--gold);color:#142233}
 .goldrule{height:4px;background:linear-gradient(90deg,var(--gold),#f0c85d 60%,transparent)}
 .cta{margin-top:30px;background:var(--brand);color:#fff;border-radius:12px;padding:20px;display:grid;gap:12px}
 @media(min-width:760px){.cta{grid-template-columns:1fr auto;align-items:center}}
@@ -136,10 +155,25 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid va
 </style>
 </head>
 <body>
+<dialog id="shareDlg" aria-label="Compartir">
+  <div class="hd"><b>Compartir</b><button type="button" id="shareX" aria-label="Cerrar">×</button></div>
+  <div class="bd">
+    <img id="shareImg" alt="Vista previa de la imagen para compartir">
+    <p class="note" style="margin:0" id="shareTip">En computadora: descarga la imagen y adjúntala en tu publicación o chat. El enlace abre el tablero en esta misma zona y colegio.</p>
+    <div class="links">
+      <a class="dl" id="shDl" download="observatorio-siseve-ciideg.png">Descargar imagen</a>
+      <a class="wa" id="shWa" target="_blank" rel="noopener">WhatsApp</a>
+      <a id="shFb" target="_blank" rel="noopener">Facebook</a>
+      <a id="shLi" target="_blank" rel="noopener">LinkedIn</a>
+      <a id="shX" target="_blank" rel="noopener">X (Twitter)</a>
+      <button type="button" id="shCopy">Copiar enlace</button>
+    </div>
+  </div>
+</dialog>
 <div class="brandbar"><div class="in">
   <a class="logo" href="https://ciideg.com" target="_blank" rel="noopener"><span><img src="assets/logo-ciideg.webp" alt="CIIDEG" width="35" height="40"></span>
     <b>Observatorio SíseVe<small>CIIDEG · Centro de Investigación, Innovación, Desarrollo y Gestión</small></b></a>
-  <nav><a href="https://ciideg.com" target="_blank" rel="noopener">ciideg.com</a><a class="wa" href="https://wa.me/51936220771?text=Hola%20CIIDEG%2C%20vi%20el%20Observatorio%20S%C3%ADseVe" target="_blank" rel="noopener">WhatsApp</a></nav>
+  <nav><button type="button" id="shareAll">Compartir</button><a href="https://ciideg.com" target="_blank" rel="noopener">ciideg.com</a><a class="wa" href="https://wa.me/51936220771?text=Hola%20CIIDEG%2C%20vi%20el%20Observatorio%20S%C3%ADseVe" target="_blank" rel="noopener">WhatsApp</a></nav>
 </div></div>
 <div class="goldrule"></div>
 <div class="wrap">
@@ -221,6 +255,14 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid va
     <h3 style="font-size:18px;margin-bottom:4px">Mapa de calor: 25 colegios con más reportes 2022–2026</h3>
     <p class="note" style="margin:0 0 8px">Cada celda es el número de reportes del colegio en el año; más oscuro, más reportes. Deja ver de un vistazo qué colegios vienen en aumento y cuáles tuvieron un año atípico.</p>
     <div class="tbl"><table id="heat" class="heat"></table></div>
+  </div>
+  <div class="panel" style="margin-top:12px">
+    <h3 style="font-size:18px;margin-bottom:4px">Tabla de colegios de la zona</h3>
+    <p class="note" style="margin:0 0 8px">Todos los campos. Toca un encabezado para ordenar (otra vez para invertir) y escribe en la fila de filtros: texto, o números con &gt;, &lt; o = (por ejemplo &gt;10). Toca un colegio para ver su radiografía.</p>
+    <div class="row" style="justify-content:space-between"><span class="note" style="margin:0" id="ctInfo"></span>
+      <span class="tbtns"><button type="button" id="ctClear">Limpiar filtros</button><button type="button" id="ctCsv">Descargar CSV</button></span></div>
+    <div class="tbl"><table id="tCol" class="coltab"></table></div>
+    <div class="row" style="justify-content:center;margin-top:8px"><span class="tbtns"><button type="button" id="ctPrev">Anterior</button><span class="note" style="margin:0 8px" id="ctPage"></span><button type="button" id="ctNext">Siguiente</button></span></div>
   </div>
   <div class="panel" style="margin-top:12px" id="radio">
     <h3 style="font-size:18px;margin-bottom:4px" id="radioT">Radiografía del colegio</h3>
@@ -496,6 +538,43 @@ function forecast(series,frac){
 
 // ---------- gráficos ----------
 Chart.defaults.font.family='Inter,system-ui,sans-serif';Chart.defaults.font.size=12;
+// Valores visibles en los gráficos: número en cada barra (dentro si cabe), total al final de las barras apiladas,
+// porcentaje en las donas y valor en las líneas marcadas con showValues. Se configura con options.plugins.valores.
+const SIN_VALORES=['cFunnel','cEF','cMat','cBL','cMC'];
+Chart.register({id:'valores',defaults:{},
+  beforeUpdate(ch,a,op){if(SIN_VALORES.includes(ch.canvas.id)||op===false||op.off)return;const L=ch.options.layout||(ch.options.layout={});
+    const h=ch.options.indexAxis==='y';L.padding=Object.assign({top:0,right:0},typeof L.padding==='object'?L.padding:{},h?{right:44}:{top:20});},
+  afterDatasetsDraw(ch,a,op){
+    if(SIN_VALORES.includes(ch.canvas.id)||op===false||op.off)return;
+    const ctx=ch.ctx,hz=ch.options.indexAxis==='y',ink=css('--ink'),fs=Math.round(Chart.defaults.font.size*.95);
+    const fmt=(v,ds)=>{if(v==null||isNaN(v))return '';const pc=op.pct||ds.valFmt==='pct'||ds.yAxisID==='y2';const d=op.dec??(pc?1:0);
+      return (d?nf1.format(Math.round(v*10)/10):nf.format(Math.round(v)))+(pc?' %':'');};
+    ctx.save();ctx.textBaseline='middle';ctx.font=`600 ${fs}px Inter,sans-serif`;
+    if(ch.config.type==='doughnut'){const m=ch.getDatasetMeta(0),ds=ch.data.datasets[0],T=ds.data.reduce((x,y)=>x+(+y||0),0);
+      m.data.forEach((arc,i)=>{const v=ds.data[i];if(!T||!v||v/T<.05)return;const p=arc.tooltipPosition();ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText(nf1.format(v/T*100)+' %',p.x,p.y);});
+      ctx.restore();return;}
+    const stacked=hz?ch.options.scales?.x?.stacked:ch.options.scales?.y?.stacked;
+    const bars=ch.data.datasets.map((ds,i)=>({ds,i,m:ch.getDatasetMeta(i)})).filter(o=>(o.ds.type||ch.config.type)==='bar'&&!o.m.hidden&&ch.isDatasetVisible(o.i));
+    const n=Math.max(0,...bars.map(o=>o.m.data.length));if(n>40){ctx.restore();return;}
+    const tot=new Array(n).fill(0),edge=new Array(n).fill(null);
+    bars.forEach(({ds,m})=>m.data.forEach((el,j)=>{const v=ds.data[j];if(v==null||isNaN(v)||!v)return;
+      const len=hz?Math.abs(el.x-el.base):Math.abs(el.base-el.y),thick=hz?el.height:el.width;
+      if(stacked){tot[j]+=+v;edge[j]=hz?Math.max(edge[j]??-1e9,el.x):Math.min(edge[j]??1e9,el.y);
+        const t=fmt(v,ds);if(len>ctx.measureText(t).width+8&&thick>=fs+2||(!hz&&len>=fs+4&&thick>ctx.measureText(t).width+2)){ctx.fillStyle='#fff';ctx.textAlign='center';
+          ctx.fillText(t,hz?(el.x+el.base)/2:el.x,hz?el.y:(el.y+el.base)/2);}}
+      else{const t=fmt(v,ds);if(op.inside&&len>fs+8){ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText(t,el.x,el.y+fs*.9);}
+        else{ctx.fillStyle=ink;ctx.textAlign=hz?'left':'center';ctx.fillText(t,hz?el.x+5:el.x,hz?el.y:el.y-fs*.75);}}}));
+    if(stacked&&!op.noTotal){ctx.fillStyle=ink;ctx.font=`800 ${fs}px Inter,sans-serif`;
+      tot.forEach((v,j)=>{if(!v||edge[j]==null)return;const el=bars[0].m.data[j];const t=nf.format(Math.round(v));
+        if(hz){ctx.textAlign='left';ctx.fillText(t,edge[j]+5,el.y);}else{ctx.textAlign='center';ctx.fillText(t,el.x,edge[j]-fs*.75);}});}
+    ctx.font=`700 ${fs}px Inter,sans-serif`;
+    ch.data.datasets.forEach((ds,i)=>{if(!ds.showValues||!ch.isDatasetVisible(i))return;const m=ch.getDatasetMeta(i);ctx.fillStyle=ds.borderColor||ink;ctx.textAlign='center';
+      m.data.forEach((pt,j)=>{const v=ds.data[j];if(v==null||isNaN(v))return;
+        if(bars.some(o=>o.ds.data[j]!=null&&Math.round(o.ds.data[j])===Math.round(v)))return; // ya rotulado en la barra
+        const t=fmt(v,ds),w=ctx.measureText(t).width,yy=pt.y-fs*1.1;
+        ctx.fillStyle=css('--card');ctx.globalAlpha=.92;ctx.beginPath();ctx.roundRect?ctx.roundRect(pt.x-w/2-5,yy-fs*.7,w+10,fs*1.4,6):ctx.rect(pt.x-w/2-5,yy-fs*.7,w+10,fs*1.4);ctx.fill();
+        ctx.globalAlpha=1;ctx.strokeStyle=ds.borderColor||ink;ctx.lineWidth=1;ctx.stroke();ctx.fillStyle=ds.borderColor||ink;ctx.fillText(t,pt.x,yy);});});
+    ctx.restore();}});
 const whisker={id:'whisker',afterDatasetsDraw(ch){const ds=ch.data.datasets[0];if(!ds.ci)return;const ctx=ch.ctx,m=ch.getDatasetMeta(0),yS=ch.scales.y;ctx.save();ctx.strokeStyle=css('--ink');ctx.lineWidth=1.3;
   m.data.forEach((bar,i)=>{const c=ds.ci[i];if(!c)return;const x=bar.x,y1=yS.getPixelForValue(c[0]),y2=yS.getPixelForValue(c[1]);ctx.beginPath();ctx.moveTo(x,y1);ctx.lineTo(x,y2);ctx.moveTo(x-6,y1);ctx.lineTo(x+6,y1);ctx.moveTo(x-6,y2);ctx.lineTo(x+6,y2);ctx.stroke();});ctx.restore();}};
 let cS,cT,cF,cQ,qMetric='tasa';
@@ -520,7 +599,7 @@ function update(){
   $('k3').textContent=fc?nf.format(Math.round(fc.band[2026].p50)):'—';
   $('k3s').textContent=fc?`cierre proyectado 2026 (80 %: ${nf.format(Math.round(fc.band[2026].p10))}–${nf.format(Math.round(fc.band[2026].p90))})`:'cierre proyectado 2026 (datos insuficientes)';
   $('k4').textContent=mat?nf1.format(r24/mat*1000):'—';
-  drawSerie(ser,fc);drawTipo(set);drawFunnel(zone);drawEstado(zone);drawMC(ser,fc);drawBacklog(zone);drawGemses(zone,set,fc);drawQuint(zone);drawColegios(zone);
+  drawSerie(ser,fc);drawTipo(set);drawFunnel(zone);drawEstado(zone);drawMC(ser,fc);drawBacklog(zone);drawGemses(zone,set,fc);drawQuint(zone);drawColegios(zone);drawColTable(true);stateToURL();
 }
 function drawSerie(ser,fc){
   const labels=[...Y,2027,2028];const obs=labels.map(y=>y<=2025&&y!==2020&&y!==2021?ser[y]:null);
@@ -535,7 +614,7 @@ function drawSerie(ser,fc){
     {type:'line',label:'Banda 95 %',data:pick('p975'),borderWidth:0,pointRadius:0,backgroundColor:proj+'22',fill:'-1',order:3},
     {type:'line',label:'80 % inf',data:pick('p10'),borderWidth:0,pointRadius:0,fill:false,order:2},
     {type:'line',label:'Banda 80 %',data:pick('p90'),borderWidth:0,pointRadius:0,backgroundColor:proj+'44',fill:'-1',order:2},
-    {type:'line',label:'Proyección (mediana)',data:pick('p50'),borderColor:proj,borderDash:[6,4],borderWidth:2.5,pointRadius:3,pointBackgroundColor:proj,fill:false,order:1},
+    {type:'line',label:'Proyección (mediana)',showValues:true,data:pick('p50'),borderColor:proj,borderDash:[6,4],borderWidth:2.5,pointRadius:3,pointBackgroundColor:proj,fill:false,order:1},
 ]};
   const o=baseOpts();o.plugins.legend.labels.filter=i=>!/inf$/.test(i.text);
   o.plugins.tooltip.filter=i=>!/inf$|Banda/.test(i.dataset.label)&&i.raw!=null;
@@ -556,7 +635,7 @@ function drawTipo(set){
     {type:'bar',label:'Física',data:k(0),backgroundColor:css('--fis'),stack:'t',yAxisID:'y'},
     {type:'bar',label:'Psicológica',data:k(1),backgroundColor:css('--psi'),stack:'t',yAxisID:'y'},
     {type:'bar',label:'Sexual',data:k(2),backgroundColor:css('--sex'),stack:'t',yAxisID:'y'},
-    {type:'line',label:'% con agresor del personal del colegio',data:pers,borderColor:css('--ink'),pointRadius:3,yAxisID:'y2'}]};
+    {type:'line',label:'% con agresor del personal del colegio',showValues:true,valFmt:'pct',data:pers,borderColor:css('--ink'),pointRadius:3,yAxisID:'y2'}]};
   const o=baseOpts();o.scales.x.stacked=true;o.scales.y.stacked=true;
   o.scales.y2={position:'right',beginAtZero:true,max:100,grid:{display:false},ticks:{color:css('--muted'),callback:v=>v+' %'}};
   o.plugins.tooltip.callbacks={label:i=>i.dataset.yAxisID==='y2'?`${i.dataset.label}: ${nf1.format(i.raw)} %`:`${i.dataset.label}: ${nf.format(i.raw)}`};
@@ -609,7 +688,7 @@ function drawQuint(zone){
   const cols=rows.map((r,i)=>i===selG?css('--proj'):i===0?css('--muted'):css('--accent'));
   const ylab=qMetric==='tasa'?'Reportes por 1,000 estudiantes':qMetric==='sexual'?'% de reportes con violencia sexual':'% de reportes con agresor del personal del colegio';
   const data={labels:rows.map(r=>[r.k,r.rng]),datasets:[{label:ylab,data:val,backgroundColor:cols,ci}]};
-  const o=baseOpts();o.plugins.legend.display=false;o.scales.y.title={display:true,text:ylab,color:css('--muted')};
+  const o=baseOpts();o.plugins.legend.display=false;o.plugins.valores={dec:1,inside:true,pct:qMetric!=='tasa'};o.scales.y.title={display:true,text:ylab,color:css('--muted')};
   o.scales.y.suggestedMax=Math.max(...ci.filter(Boolean).map(c=>c[1]),0)*1.05;
   o.plugins.tooltip={callbacks:{label:i=>{const r=rows[i.dataIndex];return `${nf1.format(i.raw??0)}${qMetric==='tasa'?' por 1,000':' %'} · ${nf.format(r.n)} colegios · ${nf.format(r.r)} reportes`;}}};
   if(cQ){cQ.data=data;cQ.options=o;cQ.update();}else cQ=new Chart($('cQuint'),{type:'bar',data,options:o,plugins:[whisker]});
@@ -656,7 +735,7 @@ function drawEstado(zone){
     {label:'Finalizado',data:top.map(u=>pct(u,'fin')),backgroundColor:css('--accent'),exp:top.map(u=>u.tot?u.E/u.tot*100:null)},
     {label:'En proceso / por validar',data:top.map(u=>pct(u,'proc')),backgroundColor:css('--proj')},
     {label:'Pendiente u observado',data:top.map(u=>pct(u,'pend')),backgroundColor:css('--warn')}]};
-  const oE=baseOpts();oE.indexAxis='y';oE.scales.x={stacked:true,min:0,max:100,grid:{color:css('--rule')},ticks:{color:mut,callback:v=>v+' %'}};
+  const oE=baseOpts();oE.indexAxis='y';oE.plugins.valores={pct:true,noTotal:true};oE.scales.x={stacked:true,min:0,max:100,grid:{color:css('--rule')},ticks:{color:mut,callback:v=>v+' %'}};
   oE.scales.y={stacked:true,grid:{display:false},ticks:{color:ink,autoSkip:false}};
   oE.plugins.tooltip.callbacks={label:i=>{const u=top[i.dataIndex];const k=['fin','proc','pend'][i.datasetIndex];return `${i.dataset.label}: ${nf.format(u[k])} (${nf1.format(i.raw)} %)`;},
     afterBody:it=>{const u=top[it[0].dataIndex];return `Esperado finalizado: ${nf1.format(u.E/u.tot*100)} % · índice de cierre ${nf.format(Math.round(u.oe*100)/100)}`;}};
@@ -831,6 +910,7 @@ function drawRadio(s){
     {type:'line',label:'Percentil 90 de comparables',data:p90,borderColor:css('--muted'),borderDash:[5,4],pointRadius:0,borderWidth:1.5,order:1}]};
   const o=baseOpts();o.plugins.tooltip.callbacks={label:i=>`${i.dataset.label}: ${nf1.format(i.raw??0)}`};
   if(cRad){cRad.data=data;cRad.options=o;cRad.update();}else cRad=new Chart($('cRad'),{data,options:o});
+  addShareBar('cRad',()=>st.c!==null?`Reportes de ${S[st.c].n} (${L.n[S[st.c].nv]}, ${L.d[S[st.c].d]}) frente a colegios comparables`:'Radiografía del colegio');
   const k=i=>TYY.reduce((a,y)=>a+tyv(s,y,i),0);const tv=[k(0),k(1),k(2)];
   const dd={labels:['Física','Psicológica','Sexual'],datasets:[{data:tv,backgroundColor:[css('--fis'),css('--psi'),css('--sex')],borderColor:css('--card'),borderWidth:2}]};
   const od={responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{color:css('--muted'),boxWidth:12}},
@@ -846,7 +926,157 @@ function drawRadio(s){
   $('radNote').textContent=`Comparables: ${nf.format(peers.length)} colegios de ${L.n[s.nv]} en ${L.u[s.u]} con al menos un reporte desde 2013. 2026 parcial = enero a agosto. El colegio no se compara con los que nunca reportaron, porque no están en la fuente.`;
 }
 
-refreshSelects();update();
+// ---------- tabla completa de colegios ----------
+const CT={sort:{k:'r25',dir:-1},f:{},page:0,rows:[]};
+const rate24=s=>s.m>=100?Math.round(tot(s,2024)/s.m*10000)/10:null;
+const typeSum=(s,i)=>TYY.reduce((a,y)=>a+tyv(s,y,i),0);
+const COLS=[
+  {k:'n',t:'Colegio',v:s=>s.n},{k:'cm',t:'Código modular',v:s=>s.cm},{k:'nv',t:'Nivel',v:s=>L.n[s.nv]},
+  {k:'g',t:'Gestión',v:s=>s.g?'Privada':'Pública'},{k:'r',t:'Región',v:s=>L.r[s.r]},{k:'p',t:'Provincia',v:s=>L.p[s.p]},
+  {k:'d',t:'Distrito',v:s=>L.d[s.d]},{k:'u',t:'UGEL',v:s=>L.u[s.u]},{k:'m',t:'Matrícula 2024',v:s=>s.m||null,num:1},
+  {k:'r24',t:'Reportes 2024',v:s=>tot(s,2024),num:1},{k:'r25',t:'Reportes 2025',v:s=>tot(s,2025),num:1},
+  {k:'r26',t:'Reportes 2026 (enero a agosto)',v:s=>tot(s,2026),num:1},{k:'rt',t:'Reportes 2013–2026',v:s=>Y.reduce((a,y)=>a+tot(s,y),0),num:1},
+  {k:'tasa',t:'Reportes por 1,000 estudiantes, 2024',v:rate24,num:1},
+  {k:'fis',t:'Física 2022–2026',v:s=>typeSum(s,0),num:1},{k:'psi',t:'Psicológica 2022–2026',v:s=>typeSum(s,1),num:1},
+  {k:'sex',t:'Sexual 2022–2026',v:s=>typeSum(s,2),num:1},{k:'per',t:'Agresor del personal del colegio 2022–2026',v:s=>typeSum(s,4),num:1},
+  {k:'pen',t:'Pensión mensual (S/)',v:s=>s.pen||null,num:1}];
+function numTest(q){const m=q.match(/^\s*(>=|<=|>|<|=)\s*(-?[\d.,]+)\s*$/);if(!m)return null;const n=+m[2].replace(/,/g,'');
+  return v=>v!=null&&(m[1]==='>'?v>n:m[1]==='<'?v<n:m[1]==='>='?v>=n:m[1]==='<='?v<=n:v===n);}
+function ctFiltered(){
+  const tests=Object.entries(CT.f).filter(([,q])=>q.trim()).map(([k,q])=>{const c=COLS.find(c=>c.k===k);const nt=numTest(q);const nq=norm(q.trim());
+    return s=>{const v=c.v(s);return nt?nt(v):v!=null&&norm(String(v)).includes(nq);};});
+  const c=COLS.find(c=>c.k===CT.sort.k);
+  return zoneSchools().filter(s=>tests.every(t=>t(s))).sort((a,b)=>{const x=c.v(a),y=c.v(b);
+    if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;
+    return (c.num?x-y:String(x).localeCompare(String(y),'es'))*CT.sort.dir;});
+}
+function drawColTable(reset){
+  if(reset)CT.page=0;
+  if(!$('tCol').tHead){
+    $('tCol').innerHTML=`<thead><tr>${COLS.map(c=>`<th class="sortable" data-k="${c.k}">${c.t}</th>`).join('')}</tr><tr class="frow">${COLS.map(c=>`<th><input data-k="${c.k}" placeholder="${c.num?'&gt;0':'filtrar'}" aria-label="Filtrar ${c.t}"></th>`).join('')}</tr></thead><tbody></tbody>`;
+    $('tCol').tHead.addEventListener('click',e=>{const th=e.target.closest('th.sortable');if(!th)return;const k=th.dataset.k;
+      CT.sort=CT.sort.k===k?{k,dir:-CT.sort.dir}:{k,dir:COLS.find(c=>c.k===k).num?-1:1};drawColTable(true);});
+    $('tCol').tHead.addEventListener('input',e=>{const i=e.target.closest('input[data-k]');if(!i)return;CT.f[i.dataset.k]=i.value;clearTimeout(CT.tm);CT.tm=setTimeout(()=>drawColTable(true),200);});
+    $('tCol').tBodies[0].addEventListener('click',e=>{const tr=e.target.closest('tr[data-i]');if(tr)pick(S[+tr.dataset.i]);});
+  }
+  $('tCol').tHead.querySelectorAll('th.sortable').forEach(th=>th.dataset.dir=th.dataset.k===CT.sort.k?(CT.sort.dir>0?'asc':'desc'):'');
+  CT.rows=ctFiltered();const P=50,np=Math.max(1,Math.ceil(CT.rows.length/P));CT.page=Math.min(CT.page,np-1);
+  const fmt=(c,v)=>v==null?'—':c.num?(c.k==='tasa'?nf1.format(v):nf.format(v)):v;
+  $('tCol').tBodies[0].innerHTML=CT.rows.slice(CT.page*P,CT.page*P+P).map(s=>`<tr data-i="${S.indexOf(s)}">${COLS.map(c=>`<td${c.num?'':' style="text-align:left"'}>${fmt(c,c.v(s))}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${COLS.length}">Ningún colegio cumple los filtros.</td></tr>`;
+  $('ctInfo').textContent=`${nf.format(CT.rows.length)} de ${nf.format(zoneSchools().length)} colegios de la zona`;
+  $('ctPage').textContent=`Página ${CT.page+1} de ${np}`;$('ctPrev').disabled=CT.page===0;$('ctNext').disabled=CT.page>=np-1;
+}
+$('ctPrev').onclick=()=>{CT.page--;drawColTable();};$('ctNext').onclick=()=>{CT.page++;drawColTable();};
+$('ctClear').onclick=()=>{CT.f={};$('tCol').tHead.querySelectorAll('input').forEach(i=>i.value='');drawColTable(true);};
+$('ctCsv').onclick=()=>{const q=v=>{const t=v==null?'':String(v);return /[",;\n]/.test(t)?'"'+t.replace(/"/g,'""')+'"':t;};
+  const csv='﻿'+[COLS.map(c=>q(c.t)).join(','),...CT.rows.map(s=>COLS.map(c=>q(c.v(s))).join(','))].join('\n')+
+    `\n\n${q('Fuente: SíseVe – Ministerio de Educación del Perú, corte '+D.meta.corte+'. Análisis: CIIDEG, Modelo GEMSES. '+SITE)}`;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='colegios-siseve-ciideg.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);};
+
+// ---------- orden y filtro en las demás tablas ----------
+const cellVal=td=>{const t=td.textContent.trim();const n=t.replace(/[%‰\s]|S\/|,/g,'').replace(/–.*$/,'');return n!==''&&!isNaN(+n)?+n:t;};
+function enhanceTable(t){
+  if(!t.tHead||!t.tBodies[0]||t.id==='tCol')return;
+  const head=t.tHead.rows[0];if(!head)return;const nC=head.cells.length;
+  const stt=t._st||(t._st={k:-1,dir:1,f:[]});
+  [...head.cells].forEach((th,i)=>{th.classList.add('sortable');th.dataset.dir=stt.k===i?(stt.dir>0?'asc':'desc'):'';th.onclick=()=>{stt.dir=stt.k===i?-stt.dir:(typeof cellVal(t.tBodies[0].rows[0]?.cells[i]||th)==='number'?-1:1);stt.k=i;apply();};});
+  if(!t.tHead.querySelector('tr.frow')){const fr=t.tHead.insertRow();fr.className='frow';
+    for(let i=0;i<nC;i++){const th=document.createElement('th');const inp=document.createElement('input');inp.placeholder='filtrar';inp.setAttribute('aria-label','Filtrar '+head.cells[i].textContent);inp.value=stt.f[i]||'';inp.oninput=()=>{stt.f[i]=inp.value;apply();};th.appendChild(inp);fr.appendChild(th);}}
+  let cnt=t.parentElement.querySelector('.tcount[data-for="'+t.id+'"]');
+  if(!cnt){cnt=document.createElement('p');cnt.className='tcount';cnt.dataset.for=t.id;t.parentElement.appendChild(cnt);}
+  function apply(){
+    const rows=[...t.tBodies[0].rows];const tests=stt.f.map((q,i)=>{if(!q||!q.trim())return null;const nt=numTest(q),nq=norm(q.trim());return r=>{const v=cellVal(r.cells[i]||r);return nt?(typeof v==='number'&&nt(v)):norm(String(r.cells[i]?.textContent||'')).includes(nq);};});
+    let vis=0;rows.forEach(r=>{const ok=tests.every(f=>!f||f(r));r.hidden=!ok;if(ok)vis++;});
+    if(stt.k>=0){rows.sort((a,b)=>{const x=cellVal(a.cells[stt.k]||a),y=cellVal(b.cells[stt.k]||b);return (typeof x==='number'&&typeof y==='number'?x-y:String(x).localeCompare(String(y),'es'))*stt.dir;});
+      obs.get(t)?.disconnect();rows.forEach(r=>t.tBodies[0].appendChild(r));watch(t);}
+    [...head.cells].forEach((th,i)=>th.dataset.dir=stt.k===i?(stt.dir>0?'asc':'desc'):'');
+    cnt.textContent=`${vis} de ${rows.length} filas`;
+  }
+  apply();
+}
+const obs=new Map();
+function watch(t){let o=obs.get(t);if(!o){o=new MutationObserver(()=>{o.disconnect();enhanceTable(t);o.observe(t,{childList:true});});obs.set(t,o);}o.observe(t,{childList:true});}
+['tQuint','tEst','heat','tAuto'].forEach(id=>{const t=$(id);if(t){enhanceTable(t);watch(t);}});
+document.querySelectorAll('table.audit:not([id])').forEach((t,i)=>{t.id='tAud'+i;enhanceTable(t);});
+
+// ---------- difusión: enlace con la vista actual e imagen para compartir ----------
+const SITE='https://carlosperez100.github.io/observatorio-siseve/';
+const logoImg=new Image();logoImg.src='assets/logo-ciideg.webp';
+function stateToURL(){const p=new URLSearchParams();['r','p','d','u','g','n'].forEach(k=>{if(st[k]!=='')p.set(k,st[k]);});
+  if(st.c!==null)p.set('c',S[st.c].cm+'-'+S[st.c].nv);const q=p.toString();try{history.replaceState(null,'',q?'?'+q:location.pathname);}catch(e){}}
+const viewURL=()=>SITE+location.search;
+function lines(x,text,maxW){const w=text.split(' ');const out=[];let cur='';w.forEach(t=>{const n=cur?cur+' '+t:t;if(x.measureText(n).width>maxW&&cur){out.push(cur);cur=t;}else cur=n;});if(cur)out.push(cur);return out;}
+async function chartImage(canvasId,title){
+  const ch=Chart.getChart(canvasId);if(!ch)return null;
+  if(!logoImg.naturalWidth)await Promise.race([logoImg.decode().catch(()=>{}),new Promise(r=>setTimeout(r,1500))]);
+  const W=1200,pad=40,CH=Math.max(520,Math.round((W-2*pad)*ch.canvas.height/ch.canvas.width));
+  // se vuelve a dibujar el gráfico a tamaño de publicación, con letra grande
+  const src=document.createElement('canvas');src.width=W-2*pad;src.height=CH;
+  const prevF=Chart.defaults.font.size;Chart.defaults.font.size=19;
+  const cfg=ch.config,tmp=new Chart(src.getContext('2d'),{type:cfg.type,
+    data:{labels:cfg.data.labels?[...cfg.data.labels]:undefined,datasets:cfg.data.datasets.map(d=>({...d}))},
+    options:Object.assign({},cfg.options,{responsive:false,maintainAspectRatio:false,animation:false,devicePixelRatio:1,onHover:null,onClick:null}),
+    plugins:cfg.plugins});
+  Chart.defaults.font.size=prevF;
+  const m=document.createElement('canvas').getContext('2d');m.font='800 30px Inter,sans-serif';const tl=lines(m,title,W-2*pad);
+  const foot=['Fuente: SíseVe – Ministerio de Educación del Perú, corte '+D.meta.corte+'. Más reportes no significa necesariamente más violencia: también refleja la cultura de denuncia.',
+    'Análisis: CIIDEG con el Modelo GEMSES · '+SITE.replace('https://','')];
+  m.font='400 17px Inter,sans-serif';const fl=foot.flatMap(f=>lines(m,f,W-2*pad));
+  const H=100+24+tl.length*38+16+CH+24+fl.length*24+24;
+  const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+  x.fillStyle=css('--card')||'#fff';x.fillRect(0,0,W,H);
+  x.fillStyle='#12385F';x.fillRect(0,0,W,96);x.fillStyle='#D7A526';x.fillRect(0,96,W,6);
+  x.fillStyle='#fff';x.beginPath();x.roundRect?x.roundRect(pad,16,64,64,12):x.rect(pad,16,64,64);x.fill();
+  if(logoImg.naturalWidth){const h=56,w=h*logoImg.naturalWidth/logoImg.naturalHeight;x.drawImage(logoImg,pad+(64-w)/2,20,w,h);}
+  x.fillStyle='#fff';x.font='800 28px Inter,sans-serif';x.fillText('Observatorio SíseVe',pad+84,48);
+  x.font='400 17px Inter,sans-serif';x.fillText('CIIDEG · Centro de Investigación, Innovación, Desarrollo y Gestión',pad+84,76);
+  let y=100+24+28;x.fillStyle=css('--ink');x.font='800 30px Inter,sans-serif';tl.forEach(l=>{x.fillText(l,pad,y);y+=38;});
+  x.drawImage(src,pad,y,W-2*pad,CH);tmp.destroy();y+=CH+24+14;
+  x.fillStyle=css('--muted');x.font='400 17px Inter,sans-serif';fl.forEach(l=>{x.fillText(l,pad,y);y+=24;});
+  return new Promise(r=>c.toBlob(b=>r(b),'image/png'));
+}
+let lastURL=null;
+async function openShare(title,canvasId){
+  const text=`${title} · Observatorio SíseVe de CIIDEG`,url=viewURL();
+  const blob=canvasId?await chartImage(canvasId,title):null;
+  if(blob){const file=new File([blob],'observatorio-siseve-ciideg.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})&&matchMedia('(pointer:coarse)').matches){
+      try{await navigator.share({files:[file],title:text,text:text+'\n'+url});return;}catch(e){if(e.name==='AbortError')return;}}}
+  if(lastURL)URL.revokeObjectURL(lastURL);lastURL=blob?URL.createObjectURL(blob):null;
+  $('shareImg').hidden=!blob;$('shDl').hidden=!blob;$('shareTip').hidden=!blob;if(blob){$('shareImg').src=lastURL;$('shDl').href=lastURL;}
+  const e=encodeURIComponent;
+  $('shWa').href=`https://wa.me/?text=${e(text+'\n'+url)}`;$('shFb').href=`https://www.facebook.com/sharer/sharer.php?u=${e(url)}`;
+  $('shLi').href=`https://www.linkedin.com/sharing/share-offsite/?url=${e(url)}`;$('shX').href=`https://twitter.com/intent/tweet?text=${e(text)}&url=${e(url)}`;
+  $('shCopy').textContent='Copiar enlace';$('shCopy').onclick=async()=>{try{await navigator.clipboard.writeText(url);$('shCopy').textContent='Enlace copiado ✔';}catch(err){prompt('Copia el enlace:',url);}};
+  $('shareDlg').showModal();
+}
+$('shareX').onclick=()=>$('shareDlg').close();$('shareDlg').addEventListener('click',e=>{if(e.target===$('shareDlg'))$('shareDlg').close();});
+$('shareAll').onclick=()=>openShare(`Violencia escolar reportada en ${$('zona').textContent}`,null);
+const zn=()=>$('zona').textContent;
+const SHARE=[
+  ['cSerie',()=>`Reportes de violencia escolar y proyección 2026 · ${zn()}`],
+  ['cTipo',()=>`Reportes por tipo de violencia · ${zn()}`],
+  ['cFunnel',()=>`Reportes por 1,000 estudiantes en cada colegio, 2024 · ${zn()}`],
+  ['cTop',()=>`Colegios con más reportes de violencia escolar, ${topY===2026?'2026 (enero a agosto)':topY} · ${zn()}`],
+  ['cEst',()=>`Estado de atención de los reportes por UGEL (Unidad de Gestión Educativa Local) · ${zn()}`],
+  ['cMC',()=>`Simulación de reportes anuales 2026–2027 · ${zn()}`],
+  ['cQuint',()=>`Reportes según pensión del colegio (quintiles), 2024 · ${zn()}`]];
+function addShareBar(id,titleFn){const box=$(id)?.closest('.chartbox');if(!box||box.nextElementSibling?.classList.contains('sharebar'))return;
+  const bar=document.createElement('div');bar.className='sharebar';
+  bar.innerHTML='<button type="button" class="pri">Compartir</button><button type="button">Descargar imagen</button>';
+  bar.children[0].onclick=()=>openShare(titleFn(),id);
+  bar.children[1].onclick=async()=>{const b=await chartImage(id,titleFn());if(!b)return;const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='observatorio-siseve-ciideg.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);};
+  box.after(bar);}
+SHARE.forEach(([id,f])=>addShareBar(id,f));
+
+// estado inicial desde el enlace compartido
+(()=>{const p=new URLSearchParams(location.search);refreshSelects();
+  for(const k of ['r','p','d','u','n']){const v=p.get(k);if(v!=null&&[...$('f'+k.toUpperCase()).options].some(o=>o.value===v)){$('f'+k.toUpperCase()).value=v;st[k]=v;refreshSelects();}}
+  const g=p.get('g');if(g==='0'||g==='1'){$('fG').value=g;st.g=g;}
+  const c=p.get('c');if(c){const [cm,nv]=c.split('-');const i=S.findIndex(s=>s.cm===cm&&String(s.nv)===nv);if(i>=0){st.c=i;renderChip();}}
+})();
+update();
+if(st.c!==null)setTimeout(()=>$('radio').scrollIntoView({block:'start'}),400);
 })();
 </script>
 </body>
