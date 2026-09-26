@@ -1,0 +1,34 @@
+name: Actualización semanal SíseVe
+
+on:
+  schedule:
+    - cron: "0 11 * * 1"   # lunes 06:00 hora de Lima
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests openpyxl
+
+      - name: Descargar y agregar el Excel público del portal SíseVe
+        run: python scripts/siseve_portal.py
+
+      - name: Auditoría (si falla un control crítico, no se publica)
+        run: python scripts/auditar.py
+      - name: Construir la página
+        run: python scripts/build.py
+      - name: Publicar
+        run: |
+          git config user.name "observatorio-bot"
+          git config user.email "observatorio-bot@users.noreply.github.com"
+          git add data/*.json docs/
+          git diff --cached --quiet || git commit -m "Actualización semanal $(date +%F)"
+          git push
