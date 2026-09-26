@@ -2,3 +2,4 @@ data/raw/
 *.xlsx
 __pycache__/
 .claude/
+solicitud/
