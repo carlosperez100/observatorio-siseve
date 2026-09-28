@@ -1,5 +1,5 @@
 {
- "fecha": "2026-09-26",
+ "fecha": "2026-09-28",
  "controles": [
   {
    "control": "Estructura de filas",
@@ -83,7 +83,7 @@
    "control": "Frescura del estado de atención",
    "ok": true,
    "critico": false,
-   "detalle": "corte 2026-08-31, hace 26 días"
+   "detalle": "corte 2026-08-31, hace 28 días"
   },
   {
    "control": "Frescura de la base por colegio",
