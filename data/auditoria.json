@@ -1,5 +1,5 @@
 {
- "fecha": "2026-09-28",
+ "fecha": "2026-10-05",
  "controles": [
   {
    "control": "Estructura de filas",
@@ -47,13 +47,13 @@
    "control": "Curva de cierre y estado usan el mismo universo",
    "ok": true,
    "critico": true,
-   "detalle": "estado 50,633 frente a curva 50,633"
+   "detalle": "estado 55,378 frente a curva 55,378"
   },
   {
    "control": "2026: base por colegio frente a Excel del portal",
-   "ok": true,
+   "ok": false,
    "critico": false,
-   "detalle": "11,791 frente a 11,805 (0.1 %); las fechas de extracción difieren"
+   "detalle": "11,791 frente a 16,550 (28.8 %); las fechas de extracción difieren"
   },
   {
    "control": "Sin campos de datos personales",
@@ -77,13 +77,13 @@
    "control": "Fracción del año dentro del rango del control (0.45–0.75)",
    "ok": true,
    "critico": true,
-   "detalle": "enero–mes 8: 0.550 (2024), 0.536 (2025); se usa 0.54"
+   "detalle": "enero–mes 9: 0.684 (2024), 0.678 (2025); se usa 0.68"
   },
   {
    "control": "Frescura del estado de atención",
    "ok": true,
    "critico": false,
-   "detalle": "corte 2026-08-31, hace 28 días"
+   "detalle": "corte 2026-09-30, hace 5 días"
   },
   {
    "control": "Frescura de la base por colegio",
